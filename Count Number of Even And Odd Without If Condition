@@ -1,0 +1,10 @@
+
+const arrayOfIntegers = [1, 4, 5, 9, 0, -1, 5,10];
+let counter = 0;
+arrayOfIntegers.forEach((integer) => {
+  const remainder = Math.abs(integer % 2);
+  console.log(remainder,"remiander");
+  counter += remainder;
+});
+console.log(counter, "No. of odd Integers");
+console.log(arrayOfIntegers.length - counter, "No. of even Integers");
