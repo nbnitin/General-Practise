@@ -1,0 +1,74 @@
+This Keyword
+A normal function’s thisBinding is determined by who calls the function.
+
+var x = 10;
+var obj = { 
+  sayHi,
+  x: 20
+};
+function sayHi() {
+  console.log(this.x);
+}
+sayHi(); // 10
+obj.sayHi(); // 20
+
+sayHi gives you a different result by how it’s called. This is because a normal function’s this is bound to the object that calls the function.
+In contrast to a normal function, an arrow function’s this is always bound to the outer function that surrounds the inner function.
+var x = 10;
+var sayHi = () => {
+  console.log(this.x);
+}
+var obj = { 
+  sayHi,
+  x: 20
+};
+sayHi(); // 10
+obj.sayHi(); // 10
+In this example, sayHi is an arrow function. It’s a property of the obj . Even though obj calls sayHi, it still prints 10 because a function’s this always refers to the outer environment’s this . And the global this is window, so it points out window.x.
+
+
+Arguments
+A normal function has a special property when it’s invoked: an argument. It contains a lot of useful information — arguments passed into the function, the caller, etc. The arguments are very useful when you can’t guarantee how many arguments will be passed into the function.
+function classroom() {
+  console.log(`We have ${arguments.length} student(s) today`);
+  console.log(`first student's name ${arguments[0]} `);
+}
+// We have 3 student(s) today
+classroom('Jane', 'Mark', 'James');
+// We have 1 student(s) today
+classroom('Miller');
+But an arrow function doesn’t have an arguments property.
+var classroom = () => {
+  console.log(`We have ${arguments.length} student(s) today`);
+}
+classroom('Jane', 'Mark', 'James');
+// Uncaught ReferenceError:
+// arguments is not defined
+
+Binds
+Function.prototype.bind is a method you can use to change the this of the function.
+var name = 'Jane';
+function sayName() {
+  console.log(this.name);
+}
+sayName(); // Jane
+sayName.bind({ name: 'James' })(); // James
+sayName prints Jane and James, depending on the assigned this .
+Function.prototype.bind returns a new function, so you should run it again to get the result.
+var name = 'Jane';
+var sayName = () => {
+  console.log(this.name);
+}
+sayName(); // Jane
+sayName.bind({ name: 'James' })(); // Jane
+But an arrow function doesn’t work with Function.prototype.bind because it doesn’t have a local thisBinding. So its this just looks at the outer environment’s this.
+
+Constructor
+When a function is called, the function is created by an internal core method with the kind parameter, which refers to what kind of function it is. The kind parameter is either Normal or Arrow. When an arrow function’s invoked, the kind is Arrow, so it is classified as a nonconstructor function.
+function constructable() {}
+var nonConstructable = () => {};
+new constructable(); // it works
+new nonConstructable();
+    ~~~~~~~~~~~~~~~~
+// Uncaught TypeError
+// nonConstructable is not a constructor
