@@ -1,3 +1,12 @@
+Difference between backtick and single quotes
+
+Back ticks(``) are called template literals. They are part of ES6. Difference is:
+
+var name = "world";
+var greetES5 = 'Hello '+name;//using single quote
+var greetES6 = `Hello ${name}`;//using ticks
+
+
 This Keyword
 A normal function’s thisBinding is determined by who calls the function.
 
