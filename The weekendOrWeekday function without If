@@ -1,0 +1,43 @@
+note:- javascript takes sunday as 0 and saturday as 6
+
+const weekendOrWeekday = (inputDate) => {
+  const day = inputDate.getDay();
+  alert(day);
+  return weekendOrWeekday.labels[day] || weekendOrWeekday.labels['default'];
+  // Or, for ternary fans:
+  // return (day === 0 || day === 6) ? 'weekend' : 'weekday';
+};
+
+weekendOrWeekday.labels = { 
+  0: 'weekend', 
+  6: 'weekend', 
+  default: 'weekday' 
+};
+console.log(weekendOrWeekday(new Date())); //current date
+
+
+// to get rid of || as it is OR operator and since we are opt to use it we can make whole days label like below
+const weekendOrWeekday = (inputDate) => {
+  const day = inputDate.getDay();
+  alert(day);
+  return weekendOrWeekday.labels[day] || weekendOrWeekday.labels['default'];
+  // Or, for ternary fans:
+  // return (day === 0 || day === 6) ? 'weekend' : 'weekday';
+};
+
+weekendOrWeekday.labels = { 
+  0: 'weekend', 
+  6: 'weekend',
+  1: 'weekday',
+  2: 'weekday',
+  3: 'weekday',
+  4: 'weekday',
+  5: 'weekday',
+  default: 'weekday' 
+};
+
+console.log(weekendOrWeekday(new Date('01/03/2020'))); //custom date ('MM/dd/yyyy')
+
+
+
+
