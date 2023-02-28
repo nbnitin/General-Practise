@@ -1,0 +1,790 @@
+import UIKit
+var arr = [2,5,7,1,0,8,11,6]
+var type0 = 0
+//var type1 = arr.count - 1
+
+//let que = DispatchQueue(label: "ll")
+//que.async {
+//    Thread.sleep(forTimeInterval: 3)
+//    print("1")
+//}
+//que.async {
+//    Thread.sleep(forTimeInterval: 1)
+//    print("2")
+//}
+//while type0 < type1 {
+//    if arr[type0] == 1 {
+//        if arr[type1] != 1 {
+//            arr[type1] = arr[type1] + arr[type0]
+//            arr[type0] = arr[type1] - arr[type0]
+//            arr[type1] = arr[type1] - arr[type0]
+//        }
+//        type1 -= 1
+//    } else {
+//        type0 += 1
+//    }
+//}
+var sum = 11
+var gg = [Int]()
+
+for i in 0 ..< arr.count {
+     sum = sum - arr[i]
+    
+    if gg.contains(sum) == false{
+        gg.append(arr[i])
+    } else {
+        print("true", gg)
+    }
+    
+   
+   
+}
+
+
+
+func test1() {
+    DispatchQueue.main.async{
+                                  test2()
+        
+    }
+    print("hello")
+    
+    DispatchQueue.main.async() {
+     print("hello 2")
+    }
+}
+
+func test2() {
+    
+    
+    DispatchQueue.main.async() {
+     print("hello 3")
+    }
+    
+    print("hello 4")
+    
+    DispatchQueue.main.async() {
+     print("hello 5")
+    }
+}
+
+test1()
+
+//class Human {
+//    var name : String
+//
+//    init(name : String) {
+//        self.name = name
+//    }
+//}
+//
+//class Man:Human {
+//    var age:Int
+//    var gender : String
+//
+//    convenience init(name: String,age:Int) {
+//        self.init(name: name)
+//
+//        self.age = age
+//
+//        self.name = name
+//    }
+//
+//    override init(name: String) {
+//        self.age = 0
+//        self.gender = "male"
+//
+//        super.init(name: name)
+//    }
+//}
+
+//enum TypeOpt {
+//    case Add
+//    case Sub
+//}
+//
+//
+//func sum<T:AdditiveArithmetic>(value1:T,value2:T,operation:TypeOpt) -> T {
+//
+//    switch operation {
+//    case .Add:
+//        return value1 + value2
+//    case .Sub:
+//        return value1 - value2
+//    }
+//
+//
+//}
+//
+//print(sum(value1:1.3,value2:2,operation: .Sub))
+
+
+
+var arrIn = [-4, -3, 4, 3, 4, 6, 1, 8, 0, -9]
+//let arrOut  = [-4, 4, -3, 3, -9, 4, 6, 1, 8, 0]
+var arrOut = [Int]()
+var arrInDic : [Int] = [Int]()
+var lastIndexOfNegativeNumberSettled = -1
+
+for i in 0 ..< arrIn.count {
+    
+    if arrIn[i] < 0 {
+        if lastIndexOfNegativeNumberSettled < 0 {
+            arrOut.append(arrIn[i])
+        } else {
+            arrOut.insert(arrIn[i], at: lastIndexOfNegativeNumberSettled + 1)
+        }
+        
+        if let indexOfPositive = arrIn.firstIndex(of: (-(arrIn[i]))) {
+            let number = arrIn[indexOfPositive]
+            arrOut.append(number)
+            arrInDic.append(indexOfPositive)
+            lastIndexOfNegativeNumberSettled += 2
+        }
+    } else if arrInDic.contains(i) == false {
+        arrOut.append(arrIn[i])
+    }
+    
+}
+
+print(arrOut)
+
+
+import UIKit
+
+
+
+
+
+
+struct A {
+    var x : Int
+    var s : B
+}
+
+class B {
+     var p : Int
+    
+    init(p:Int) {
+        self.p = p
+    }
+}
+
+var a = A(x: 1,s: B(p: 2))
+var b = a
+
+func addressOf(_ o: UnsafeRawPointer) -> String {
+    let addr = unsafeBitCast(o, to: Int.self)
+    return String(format: "%p", addr)
+}
+
+func addressOf<T: AnyObject>(_ o: T) -> String {
+    let addr = unsafeBitCast(o, to: Int.self)
+    return String(format: "%p", addr)
+}
+
+print(addressOf(&a))
+print(addressOf(&b))
+
+b.x = 2
+b.s.p = 4
+print(a.x)
+print(b.x)
+
+print(a.s.p)
+print(b.s.p)
+
+
+
+func prints() {
+    print("1")
+    
+    DispatchQueue.main.async {
+        print("2")
+        DispatchQueue.main.async(qos:.userInitiated) {
+            print("3")
+            DispatchQueue.main.async(qos: .background) {
+                print("5")
+            }
+            print("6")
+        }
+        print("8")
+    }
+    
+    
+    print("7")
+}
+
+prints()
+
+
+  final class Article : Sendable {
+    var views : Int = 0
+    var quue = DispatchQueue(label: "pp")
+     private var x : Int = 1
+     init() {
+         update()
+     }
+     
+    func update(){
+        quue.sync {
+            self.views += 1
+        }
+       
+    }
+}
+
+
+let x = Article()
+
+for i in 0 ... 5 {
+    x.update()
+    print(x.views, "ff")
+}
+
+struct RemoteData : AsyncSequence {
+    
+    func makeAsyncIterator() -> RemoteDataIterator {
+        RemoteDataIterator(urls: urls)
+    }
+    
+    typealias Element = Data
+    
+    var urls : [URL]
+    
+   
+}
+
+struct RemoteDataIterator : AsyncIteratorProtocol {
+    var urls : [URL]
+    
+    fileprivate var index = 0
+    
+    mutating func next() async throws -> Data? {
+        guard index < urls.count else {
+            return nil
+        }
+        
+        let url = urls[index]
+        index += 1
+        
+        let (data,_) = try await URLSession.shared.data(from: url)
+
+        return data
+    }
+}
+
+for try await data in RemoteData(urls: [URL(string:"dfdfd")!]) {
+    
+}
+
+
+//func test1() {
+//    print("hello 4")
+//
+//
+//        test2()
+//
+//
+//    DispatchQueue.main.async {
+//        print("hello 1")
+//    }
+//
+//
+//    print("hello 2")
+//}
+//
+//func test2() {
+//    print("hello 263")
+//    DispatchQueue.main.async {
+//        print("hello 5")
+//    }
+//
+//    DispatchQueue.main.async {
+//        print("hello 16")
+//    }
+//
+//
+//    print("hello 26")
+//}
+//
+//test1()
+
+//protocol ItemStoring {
+//    associatedtype dataType
+//
+//    var items : [dataType] {get set}
+//
+//    mutating func add(items:dataType)
+//}
+//
+//extension ItemStoring {
+//    mutating func add(items:dataType) {
+//        self.items.append(items)
+//    }
+//}
+//
+//struct Goods: ItemStoring {
+//    var items: [String] = [String]()
+//}
+//
+//
+//var gg = Goods()
+//gg.add(items: "pp")
+//gg.add(items: "pp1")
+//
+//print(gg.items)
+//
+//
+//enum Sample {
+//    case sample1(height:String)
+//    case sample2(height:Double)
+//}
+//
+//let c = Sample.sample1(height: "33")
+//
+//switch c {
+//case .sample1(let height):
+//    print(height)
+//case .sample2(let height):
+//    print(height)
+//}
+
+
+import UIKit
+
+let str = "abcd"
+var str1 : [Character] = [Character]()
+
+for chars in str {
+    str1.insert(chars, at: 0)
+}
+print(String(str1))
+
+
+
+
+
+import UIKit
+
+func findEvenSquares(_ value : [Any]) -> [Int] {
+    
+    var result : [Int] = [Int]()
+    
+    let x = value.map({item in
+        if let tempItem = item as? Int {
+            if (tempItem * tempItem) % 2 == 0 {
+                result.append(tempItem * tempItem)
+            }
+            return true
+        }
+        return false
+    })
+    
+    return result
+   
+}
+
+func find(_ sub:String) -> Bool {
+    let main = "nitin"
+    
+    let p = main+main
+    
+    print(p)
+    return p.contains(sub)
+    
+}
+
+
+print(find("inni")) //ni ti in nin inni
+
+
+//print(findEvenSquares([1,3,4,"Nitin"]))
+
+let numbers = [1,3,5,7,9]
+print (numbers.reduce(2,+))
+
+
+
+import UIKit
+
+extension Array {
+    
+    func myCompactMap<Transform>(transform: (Element) -> Transform?) -> [Transform] {
+        
+        var result = [Transform]()
+        
+        forEach{ item in
+            
+            if let tempItem = transform(item) {
+                result.append(tempItem)
+            }
+            
+        }
+        
+        return result
+        
+    }
+    
+}
+
+
+let ad = ["1","2","///4///","3"]
+
+//let b : [Int] = ad.compactMap{ str in Int(str) }
+
+//print(b)
+
+let b = ad.myCompactMap(transform: { str  in
+    (Int(str))
+}).map({
+    $0 * 2
+})
+
+print(b)
+
+func compareNumbers(val1 : Int, val2 : Int) -> Bool {
+    
+    //print(val1 , val2)
+    
+    let value = "\(val1)" + "\(val2)"
+    
+    let newValue = "\(val2)" + "\(val1)"
+    
+    return value > newValue
+    
+}
+
+let a = [3,30,34,5,9] //[9,5,34,3,30]
+
+
+
+let x = a.sorted(by: {
+    
+    return compareNumbers(val1: $0, val2: $1)
+    
+    
+})
+
+print(x)
+
+//for i in 0 ..< x.count {
+//    print(x[i])
+//}
+
+
+
+
+
+import UIKit
+
+
+
+protocol GeometeryShape {
+    func getArea() -> Double
+}
+
+struct Triangle : GeometeryShape {
+    let width : Double
+    let height : Double
+    
+    func getArea() -> Double {
+        return width * height
+    }
+}
+
+struct AreaCalculator {
+    func area(shape: GeometeryShape) -> Double {
+        return shape.getArea()
+    }
+}
+
+print(AreaCalculator().area(shape: Triangle(width: 10, height: 10)))
+
+
+var number: Int! = 5
+print("My age is \(number).")
+
+number = nil
+
+let withoutTypeAnnotation = number
+print("My age is \(withoutTypeAnnotation).")
+
+let withTypeAnnotation : Int = number
+print("My age is \(withTypeAnnotation).")
+
+//if let _ = x.b {
+//    print("ff")
+//}
+
+
+var greeting  = 1020 //output 1525
+var decimalPlace = 1
+var result = 0
+
+
+func replace()->Int {
+    var ans = 0
+    var temp = greeting
+
+//    if greeting == 0 {
+//        result += (5 * decimalPlace)
+//        return result
+//    }
+
+    while greeting > 0 {
+        var x = greeting % 10
+        if x == 0 {
+            x = 5
+        }
+        ans = ans * 10 + x
+        greeting /= 10
+    }
+    var x = 0
+    while ans > 0 {
+        let o = ans % 10
+        x = (x * 10) + o
+        ans = ans / 10
+    }
+    
+    
+    return x
+}
+print(replace())
+
+func replace0with5() -> Int {
+    if greeting == 0 {
+        result += (5 * decimalPlace)
+        return result
+    }
+    
+    while greeting > 0 {
+        if greeting % 10 == 0 {
+            result += 5 * decimalPlace
+        }
+        greeting = greeting / 10
+        decimalPlace *= 10
+    }
+    return result
+}
+
+print(replace0with5())
+
+func reverseInt(_ value:Int) -> Int {
+    var ans = 0
+    var tempValue = value
+    while tempValue > 0 {
+        let x = tempValue % 10
+        ans = ans * 10 + x
+        tempValue /= 10
+    }
+    return ans
+}
+let x = greeting + replace0with5()
+
+print(reverseInt(x))
+
+
+
+
+//Input: nums = [2,7,11,15], target = 9
+//Output: [0,1]
+//Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+
+//let nums = [2,11,7,15]
+//var nextIndex = 0
+//let targetNumber = 9
+//var found = false
+//for index in 0 ..< nums.count {
+//
+//    for tempIndex in index ..< nums.count - 1 {
+//        let x = nums[index]
+//        let y = nums[tempIndex]
+//
+//        if x + y == targetNumber {
+//            print(nextIndex, nextIndex + 1)
+//            found = true
+//            break
+//        }
+//
+//        if found {
+//            break
+//        }
+//    }
+//
+//
+//
+//
+//}
+
+extension Array {
+    func myCompactMap<Transform>(transform: (Element)-> Transform?) -> [Transform] {
+        var result = [Transform]()
+        forEach { element in
+            if let transformedEntity = transform(element) {
+            result.append(transformedEntity)
+            }
+        }
+        return result
+    }
+    
+    func xx<Transform>(element: (Element)->Transform?)->[Transform] {
+        var result = [Transform]()
+        
+        forEach({item in
+            if let itemEntity = element(item) {
+                result.append(itemEntity)
+            }
+            
+        })
+        return result
+    }
+}
+
+[1,2,4,2].xx(element: {
+    print($0)
+})
+
+enum Distance {
+    case km(String,Int)
+}
+
+enum Mercedes {
+
+    case sedan(height: Double,model:String)
+    case suv(height: Double,model:Int)
+ case roadster(height: Double)
+}
+
+var choice = Mercedes.suv(height: 5.4,model: 1)
+
+switch(choice) {
+ case let .sedan(height,model):
+   print("Height:", height,model)
+
+ case let .suv(height,model):
+   print("Height:", height,model)
+
+ case let .roadster(height):
+   print("Height:", height)
+}
+
+let x1 = Distance.km("Metric", 9)
+print(x1)
+
+
+
+//struct User : Equatable {
+//
+//    let x : Int
+//    static func ==(lhs:User,rhs:User) -> Bool {
+//        return lhs.x == rhs.x
+//    }
+//
+//}
+
+
+
+
+
+import UIKit
+
+var stringValue = "ff"
+stringValue = nil
+
+class A {
+    static var x = 10
+    final var y = 20
+    
+    private var p = 20
+    func hello() {
+       // self.x = 20
+    }
+}
+
+extension A {
+    func eMethod() {
+        
+    }
+}
+
+class B : A {
+    
+    
+}
+
+
+let x = "10 + 4 - 50 / 10 * 4 + 2 - 4"
+//let p = NSExpression(format: x).expressionValue(with: nil, context: nil) as? Int
+//print(p)
+
+let seperators = x.components(separatedBy: "-")
+var mixExpression = ""
+var addition = 0
+for seperator in seperators {
+    if (seperator.contains("/") && seperator.contains("+")) || seperator.contains("*") && seperator.contains("+") {
+        mixExpression = seperator
+    } else if (seperator.trimmingCharacters(in: .whitespaces)).count > 2  {
+        let xx = seperator.trimmingCharacters(in: .whitespaces).components(separatedBy: "+")
+        print(xx,"ll")
+        xx.forEach({
+            addition += Int($0.trimmingCharacters(in: .whitespaces))!
+            print(addition,"jj")
+        })
+            
+        
+    }
+}
+
+
+print(seperators,addition)
+
+//func add<T>(_ value1: T, valu2:T)->T {
+//
+//
+//    return value1
+//
+//    return
+//
+//
+//}
+
+
+//add("hello", valu2: "hi")
+
+//extension String: AdditiveArithmetic {
+//    public static func - (lhs: String, rhs: String) -> String {
+//        return lhs + rhs
+//    }
+//
+//    // some stupid placeholders, as there is no obvious behavior for that :D
+//
+//
+//
+//
+//    public static var zero: String {
+//        ""
+//    }
+//}
+
+func sum(_ a:String,_ b:String) -> String {
+    return a+b
+}
+
+func sum<T: AdditiveArithmetic>(_ a: T, _ b: T) -> T {
+     a + b
+}
+
+print(sum("LOl", "KEK")) // LOLKEK
+print(sum(1, 2)) // 3
+
+
+
+
+
+
+
+
+
+
+
